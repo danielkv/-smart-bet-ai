@@ -1,0 +1,31 @@
+body,
+html {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #fff;
+    background-image: radial-gradient(circle at 10% 20%, rgb(54, 52, 26) 0%, rgb(32, 29, 2) 40%, rgb(0, 0, 0) 100%);
+}
+#root {
+    height: 100%;
+}
+
+@keyframes growing-item {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.05);
+    }
+}
+
+.growing {
+    animation-name: growing-item;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}

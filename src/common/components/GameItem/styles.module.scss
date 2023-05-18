@@ -1,0 +1,47 @@
+.gameButton {
+    color: white;
+    text-decoration: none;
+
+    .gameItem {
+        width: 150px;
+        height: 150px;
+        background-size: cover;
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.1) !important;
+        }
+
+        &.withSignal {
+            animation: withSignal infinite 2s;
+            animation-direction: alternate-reverse;
+        }
+    }
+
+    .gameTitleBlock {
+        background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+        padding: 5px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .imageSrc {
+        width: 100px;
+        aspect-ratio: 1;
+        object-fit: cover;
+    }
+}
+
+@keyframes withSignal {
+    from {
+        box-shadow: 0 0 10px #f5de5a8f;
+    }
+    to {
+        box-shadow: 0 0 30px #f5de5a8f;
+    }
+}
