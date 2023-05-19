@@ -8,6 +8,7 @@ const TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN
 
 type TTelegramBotEvents = {
     message: (message: Message) => void
+    getUpdates: (updates: Update[]) => void
 }
 
 class TelegramBot extends (EventEmitter as new () => TypedEmitter<TTelegramBotEvents>) {
@@ -50,12 +51,20 @@ class TelegramBot extends (EventEmitter as new () => TypedEmitter<TTelegramBotEv
         const updates = await this.getUpdates()
 
         const emitMessages = new Promise((resolve) => {
-            updates.forEach((update) => {
-                if (!update.channel_post) return
+            if (this.listenerCount('message') >= 1) {
+                updates.forEach((update) => {
+                    if (!update.channel_post) return
 
-                this.offset = update.update_id + 1
-                this.emit('message', update.channel_post)
-            })
+                    this.emit('message', update.channel_post)
+                })
+            }
+
+            if (updates.length) {
+                const updateId = updates.at(-1)?.update_id || 0
+                this.offset = updateId + 1
+            }
+
+            this.emit('getUpdates', updates)
 
             resolve(true)
         })

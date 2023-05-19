@@ -1,5 +1,5 @@
 import { TSignal } from '../../common/interfaces/common'
-import { Message } from '../../common/interfaces/telegrambot'
+import { Message, Update } from '../../common/interfaces/telegrambot'
 import { telegramBot } from '../../common/providers/TelegramBot'
 
 import { aviatorMessageReader } from './aviator'
@@ -26,7 +26,7 @@ class MessageProcessor {
         [MessageProcessor.DRAGON_TIGER]: dragonTigerMessageReader,
     }
 
-    async process(message: Message, cb: (signal: TSignal) => void | Promise<void>, channelId?: number) {
+    process(message: Message, channelId?: number) {
         const text = message.text
         if (!text) throw new Error('The message has no text')
 
@@ -39,22 +39,34 @@ class MessageProcessor {
         const signal = game.process(text)
         if (!signal) throw new Error(`${game.gameName}: No signal processed`)
 
-        await Promise.resolve(cb(signal))
+        return signal
     }
 
-    listen(cb: (signal: TSignal) => void | Promise<void>, channelId?: number) {
-        const listener = (m: Message) => {
-            this.process(m, cb, channelId).catch((err) => {
-                console.error(err)
-            })
+    listen(cb: (signal: TSignal[]) => void | Promise<void>, channelId?: number) {
+        const listener = (updates: Update[]) => {
+            const signals = updates.reduce<TSignal[]>((acc, update) => {
+                try {
+                    const message = update.channel_post
+                    if (!message) return acc
+
+                    const signal = this.process(message, channelId)
+                    if (signal) acc.push(signal)
+
+                    return acc
+                } catch {
+                    return acc
+                }
+            }, [])
+
+            return cb(signals)
         }
 
-        telegramBot.on('message', listener)
+        telegramBot.on('getUpdates', listener)
         telegramBot.startPolling(5000)
 
         return () => {
             telegramBot.stopPolling()
-            telegramBot.removeListener('message', listener)
+            telegramBot.removeListener('getUpdates', listener)
         }
     }
 }

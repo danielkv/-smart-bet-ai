@@ -1,8 +1,10 @@
+import clonedeep from 'clone-deep'
+
 import { createStore } from 'solid-js/store'
 
 import { IAviatorEntry } from '../../common/interfaces/aviator'
 import { IBacBoEntry } from '../../common/interfaces/bac-bo'
-import { IFinishedEntry, IGale, IPossibleEntry, IScore } from '../../common/interfaces/common'
+import { IFinishedEntry, IGale, IPossibleEntry, IScore, TSignal } from '../../common/interfaces/common'
 import { IDragonTigerEntry } from '../../common/interfaces/dragon-tiger'
 import { IMinesEntry } from '../../common/interfaces/mines'
 import { IPenaltyEntry } from '../../common/interfaces/penalty'
@@ -26,3 +28,42 @@ type TSignalStore = {
 }
 
 export const [signalStore, setSignalStore] = createStore<Partial<TSignalStore>>()
+
+export function updateSignalStore(signals: TSignal[]) {
+    const store: Partial<TSignalStore> = clonedeep(signalStore)
+
+    signals.forEach((signal) => {
+        const game = store[signal.game]
+
+        switch (signal.type) {
+            case 'entry': {
+                if (!game?.possible) return
+                game.entry = signal
+                break
+            }
+            case 'possible': {
+                store[signal.game] = {
+                    possible: signal,
+                    score: game?.score,
+                }
+                break
+            }
+            case 'finished':
+            case 'score': {
+                if (!game) return
+
+                store[signal.game] = { [signal.type]: signal, entry: game?.entry as any }
+                break
+            }
+            default: {
+                if (!game?.possible || !game?.entry) return
+
+                game[signal.type] = signal
+
+                break
+            }
+        }
+    })
+
+    setSignalStore(() => store)
+}

@@ -7,7 +7,7 @@ import { IGame } from '../../../view/Home/config'
 import styles from './styles.module.scss'
 
 export interface GameItemProps extends IGame {
-    withSignal?: boolean
+    signal?: 'possible' | 'entry'
 }
 
 const GameItem: Component<GameItemProps> = (props) => {
@@ -17,7 +17,8 @@ const GameItem: Component<GameItemProps> = (props) => {
                 <Stack
                     class={styles.gameItem}
                     classList={{
-                        [styles.withSignal]: props.withSignal,
+                        [styles.entry]: props.signal === 'entry',
+                        [styles.possible]: props.signal === 'possible',
                     }}
                     style={{ 'background-image': `url(${props.image})` }}
                     direction="column"

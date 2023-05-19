@@ -1,61 +1,26 @@
-import { Component, For, createSignal, onCleanup, onMount } from 'solid-js'
-import { produce } from 'solid-js/store'
+import { Component, For, createMemo, onCleanup } from 'solid-js'
 
 import { Button, Chip, Grid, Stack, Typography } from '@suid/material'
 
 import { messageReader } from '../../bot/readers/reader'
 import GameItem from '../../common/components/GameItem'
-import { TSignal } from '../../common/interfaces/common'
-import { setSignalStore, signalStore } from '../../domain/contexts/signals'
+import { signalStore, updateSignalStore } from '../../domain/contexts/signals'
 
 import { GAMES } from './config'
 import styles from './styles.module.scss'
 
-const [possible, setPossible] = createSignal(false)
-const [confirmed, setConfirmed] = createSignal(false)
-
 const HomeRoute: Component = () => {
-    function callback(signal: TSignal) {
-        if (signal.type === 'possible' && !possible()) {
-            setPossible(true)
-        }
-        if (signal.type === 'entry' && possible() && !confirmed()) {
-            setConfirmed(true)
-        }
-
-        setSignalStore(
-            produce((current) => {
-                const game = current[signal.game]
-
-                switch (signal.type) {
-                    case 'entry': {
-                        if (!game?.possible) return
-                        game.entry = signal
-                        break
-                    }
-                    case 'possible': {
-                        current[signal.game] = {
-                            possible: signal,
-                            score: game?.score,
-                        }
-                        break
-                    }
-                    default: {
-                        if (!game?.possible || !game?.entry) return
-
-                        game[signal.type as 'finished' | 'gale' | 'score'] = signal as any
-
-                        break
-                    }
-                }
-            })
-        )
-    }
-
-    const removeListener = messageReader.listen(callback)
+    const removeListener = messageReader.listen(updateSignalStore)
 
     onCleanup(() => {
         removeListener()
+    })
+
+    const thereIsPossible = createMemo(() => {
+        return Object.values(signalStore).some((item) => !!item.possible)
+    })
+    const thereIsConfirmed = createMemo(() => {
+        return Object.values(signalStore).some((item) => !!item.entry)
     })
 
     return (
@@ -67,31 +32,39 @@ const HomeRoute: Component = () => {
 
                 <Stack direction="row" justifyContent="center" gap={2}>
                     <Chip
-                        classList={{ [styles.chipGlow]: possible() }}
-                        label="Possibilidade de entrada"
-                        variant={possible() ? 'filled' : 'outlined'}
+                        classList={{ [styles.chipGlow]: thereIsPossible() }}
+                        label="Possível de entrada"
+                        variant={thereIsPossible() ? 'filled' : 'outlined'}
                         color="warning"
                     />
                     <Chip
-                        classList={{ [styles.chipGlow]: confirmed() }}
-                        variant={confirmed() ? 'filled' : 'outlined'}
+                        classList={{ [styles.chipGlow]: thereIsConfirmed() }}
+                        variant={thereIsConfirmed() ? 'filled' : 'outlined'}
                         label="Entrada confirmada"
                         color="success"
                     />
                 </Stack>
             </Stack>
 
-            <Grid container spacing={6} columns={12}>
+            <Grid container spacing={{ xs: 4, sm: 5 }} columns={12}>
                 <For each={GAMES}>
-                    {(item) => (
-                        <GameItem
-                            name={item.name}
-                            label={item.label}
-                            url={item.url}
-                            image={item.image}
-                            withSignal={!!signalStore?.[item.name]}
-                        />
-                    )}
+                    {(item) => {
+                        const signal = createMemo(() => {
+                            if (signalStore?.[item.name]?.entry) return 'entry'
+                            if (signalStore?.[item.name]?.possible) return 'possible'
+
+                            return undefined
+                        })
+                        return (
+                            <GameItem
+                                name={item.name}
+                                label={item.label}
+                                url={item.url}
+                                image={item.image}
+                                signal={signal()}
+                            />
+                        )
+                    }}
                 </For>
             </Grid>
 
