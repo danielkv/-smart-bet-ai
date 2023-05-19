@@ -1,0 +1,55 @@
+.gameImage {
+    border-radius: 20px;
+    max-width: 170px;
+    width: 30%;
+    aspect-ratio: auto 1 / 1;
+    object-fit: cover;
+
+    &.entry {
+        animation: signalEntry infinite 2s;
+        animation-direction: alternate-reverse;
+        filter: grayscale(0) brightness(1);
+    }
+
+    &.possible {
+        animation: signalPossible infinite 2s;
+        animation-direction: alternate-reverse;
+        filter: grayscale(0) brightness(1);
+    }
+}
+
+.chipPossible {
+    background-color: #524931c9 !important;
+}
+.chipConfirmed {
+    background-color: #263f26c9 !important;
+}
+.chipGlowing {
+    animation: chipGlowing infinite 1s;
+    animation-direction: alternate-reverse;
+}
+
+@keyframes chipGlowing {
+    from {
+        box-shadow: 0 0 1px #ffffff66;
+    }
+    to {
+        box-shadow: 0 0 10px #ffffff66;
+    }
+}
+@keyframes signalEntry {
+    from {
+        box-shadow: 0 0 10px #6cf56cc9;
+    }
+    to {
+        box-shadow: 0 0 30px #6cf56cc9;
+    }
+}
+@keyframes signalPossible {
+    from {
+        box-shadow: 0 0 10px #f5de5a8f;
+    }
+    to {
+        box-shadow: 0 0 30px #f5de5a8f;
+    }
+}

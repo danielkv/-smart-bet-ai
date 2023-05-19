@@ -58,7 +58,9 @@ export class PenaltyMessageReader extends MessageReaderBase {
 
     private readConfirmed(message: string): IPenaltyEntry | null {
         const typeRegex =
-            /🔔 Entrada Confirmada 🔔 \n\n.*\n🎯Seleção: (?<team>.*)\n\n(?<map>[(?:⚽️|🧍🏻|🧤)\n\s]+)\n\n🎯 Nº de Tentativas: (?<tries>\d+)\n⏱ Válido até (?<expiresAt>\d\d\:\d\d)/
+            /🔔 Entrada Confirmada 🔔\s*\n\s*\n.*\n🎯Seleção: (?<team>.*)\n\s*\n(?<map>(.|\n)+)\n\s*\n🎯 Nº de Tentativas: (?<tries>\d+).*\n⏱ Válido até (?<expiresAt>\d\d\:\d\d)/
+        // const typeRegex =
+        //     /🔔 Entrada Confirmada 🔔\s*\n\s*\n.*\n🎯Seleção: (?<team>.*)\n\s*\n(?<map>[(?:⚽️|🧍🏻|🧤)\n\s]+)\n\s*\n🎯 Nº de Tentativas: (?<tries>\d+).*\n⏱ Válido até (?<expiresAt>\d\d\:\d\d)/
 
         const matchEntry = message.match(typeRegex)
 
@@ -70,30 +72,33 @@ export class PenaltyMessageReader extends MessageReaderBase {
         )
             return null
 
-        const plays = matchEntry.groups.map.replaceAll(' ', '').split('\n\n')
+        // const plays = matchEntry.groups.map.replaceAll(' ', '').split('\n\n')
 
-        const map = plays.map((play) => {
-            const rows = play.split('\n')
+        // const map = plays.map((play) => {
+        //     const rows = play.split('\n')
 
-            return rows.map((row) => {
-                const items = row
-                    .replaceAll(this.ball, 'b')
-                    .replaceAll(this.hand, 'h')
-                    .replaceAll(this.person, 'p')
-                    .split('')
-                return items.map((item) => {
-                    switch (item) {
-                        case 'b':
-                            return 'ball'
-                        case 'p':
-                            return 'person'
-                        case 'h':
-                        default:
-                            return 'hand'
-                    }
-                })
-            })
-        })
+        //     return rows.map((row) => {
+        //         const items = row
+        //             .replaceAll(this.ball, 'b')
+        //             .replaceAll(this.hand, 'h')
+        //             .replaceAll(this.person, 'p')
+        //             .split('')
+        //         return items
+        //             .map((item) => {
+        //                 switch (item) {
+        //                     case 'b':
+        //                         return 'ball'
+        //                     case 'p':
+        //                         return 'person'
+        //                     case 'h':
+        //                         return 'hand'
+        //                     default:
+        //                         return ''
+        //                 }
+        //             })
+        //             .filter((i) => i)
+        //     })
+        // })
 
         const [minute, second] = matchEntry.groups.expiresAt.split(':')
         return {
@@ -101,7 +106,7 @@ export class PenaltyMessageReader extends MessageReaderBase {
             team: matchEntry.groups.team,
             expiresAt: dayjs().set('second', Number(second)).set('minute', Number(minute)).millisecond(),
             tries: Number(matchEntry.groups.tries),
-            map,
+            map: matchEntry.groups.map,
             createdAt: Date.now(),
             game: this.gameName,
         }

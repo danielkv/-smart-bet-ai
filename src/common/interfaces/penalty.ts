@@ -4,6 +4,6 @@ export interface IPenaltyEntry {
     team: string
     tries: number
     expiresAt: number
-    map: ('hand' | 'ball' | 'person')[][][]
+    map: string
     createdAt: number
 }

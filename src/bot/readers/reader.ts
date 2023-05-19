@@ -37,7 +37,10 @@ class MessageProcessor {
         if (!game) throw new Error(`Game not found `)
 
         const signal = game.process(text)
-        if (!signal) throw new Error(`${game.gameName}: No signal processed`)
+        if (!signal) {
+            //console.log(text)
+            throw new Error(`${game.gameName}: No signal processed`)
+        }
 
         return signal
     }

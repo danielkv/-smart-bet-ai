@@ -2,20 +2,13 @@ import { Component, For, createMemo, onCleanup } from 'solid-js'
 
 import { Button, Chip, Grid, Stack, Typography } from '@suid/material'
 
-import { messageReader } from '../../bot/readers/reader'
 import GameItem from '../../common/components/GameItem'
-import { signalStore, updateSignalStore } from '../../domain/contexts/signals'
+import { GAMES_CONFIG } from '../../common/components/utils/game.config'
+import { signalStore } from '../../domain/contexts/signals'
 
-import { GAMES } from './config'
 import styles from './styles.module.scss'
 
 const HomeRoute: Component = () => {
-    const removeListener = messageReader.listen(updateSignalStore)
-
-    onCleanup(() => {
-        removeListener()
-    })
-
     const thereIsPossible = createMemo(() => {
         return Object.values(signalStore).some((item) => !!item.possible)
     })
@@ -24,7 +17,7 @@ const HomeRoute: Component = () => {
     })
 
     return (
-        <Stack gap={6} my={6}>
+        <Stack gap={6} my={6} flex={1}>
             <Stack gap={3}>
                 <Typography variant="h1" fontSize="26px" textAlign="center">
                     Escolha o jogo que quer ganhar
@@ -47,7 +40,7 @@ const HomeRoute: Component = () => {
             </Stack>
 
             <Grid container spacing={{ xs: 4, sm: 5 }} columns={12}>
-                <For each={GAMES}>
+                <For each={GAMES_CONFIG}>
                     {(item) => {
                         const signal = createMemo(() => {
                             if (signalStore?.[item.name]?.entry) return 'entry'
@@ -55,15 +48,7 @@ const HomeRoute: Component = () => {
 
                             return undefined
                         })
-                        return (
-                            <GameItem
-                                name={item.name}
-                                label={item.label}
-                                url={item.url}
-                                image={item.image}
-                                signal={signal()}
-                            />
-                        )
+                        return <GameItem name={item.name} label={item.label} image={item.image} signal={signal()} />
                     }}
                 </For>
             </Grid>

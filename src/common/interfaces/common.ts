@@ -5,17 +5,9 @@ import { IMinesEntry } from './mines'
 import { IPenaltyEntry } from './penalty'
 import { ISpaceManEntry } from './space-man'
 
-export type TSignal =
-    | IPossibleEntry
-    | IMinesEntry
-    | IFinishedEntry
-    | IBacBoEntry
-    | ISpaceManEntry
-    | IDragonTigerEntry
-    | IGale
-    | IScore
-    | IAviatorEntry
-    | IPenaltyEntry
+export type TEntryType = IMinesEntry | IBacBoEntry | ISpaceManEntry | IDragonTigerEntry | IAviatorEntry | IPenaltyEntry
+
+export type TSignal = IPossibleEntry | IFinishedEntry | IGale | IScore | TEntryType
 
 export type TGameType = 'aviator' | 'bacbo' | 'dragon-tiger' | 'penalty' | 'space-man' | 'mines'
 
@@ -53,4 +45,28 @@ export interface IScore {
     pct: number
     consecutiveGreens: number
     createdAt: number
+}
+
+export interface TGameSignals<Entry> {
+    possible?: IPossibleEntry
+    finished?: IFinishedEntry
+    gale?: IGale
+    score?: IScore
+    entry?: Entry
+}
+
+export interface IGameConfig {
+    image: string
+    name: TGameType
+    label: string
+    url: string
+}
+
+export type TSignalStore = {
+    aviator: TGameSignals<IAviatorEntry>
+    bacbo: TGameSignals<IBacBoEntry>
+    'dragon-tiger': TGameSignals<IDragonTigerEntry>
+    penalty: TGameSignals<IPenaltyEntry>
+    'space-man': TGameSignals<ISpaceManEntry>
+    mines: TGameSignals<IMinesEntry>
 }

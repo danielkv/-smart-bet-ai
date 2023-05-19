@@ -5,11 +5,11 @@
     background-color: #333;
 }
 .chipGlow {
-    animation: chiGlowing infinite 2s;
+    animation: chipGlowing infinite 2s;
     animation-direction: alternate-reverse;
 }
 
-@keyframes chiGlowing {
+@keyframes chipGlowing {
     from {
         box-shadow: 0 0 10px #ffffffaa;
     }

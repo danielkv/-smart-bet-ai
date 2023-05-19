@@ -1,19 +1,20 @@
 import { Component } from 'solid-js'
 
+import { A } from '@solidjs/router'
 import { Box, Grid, Stack, Typography } from '@suid/material'
 
-import { IGame } from '../../../view/Home/config'
+import { IGameConfig } from '../../interfaces/common'
 
 import styles from './styles.module.scss'
 
-export interface GameItemProps extends IGame {
+export interface GameItemProps extends Omit<IGameConfig, 'url'> {
     signal?: 'possible' | 'entry'
 }
 
 const GameItem: Component<GameItemProps> = (props) => {
     return (
         <Grid item xs={4}>
-            <a class={styles.gameButton} href={props.url}>
+            <A class={styles.gameButton} href={`/games/${props.name}`}>
                 <Stack
                     class={styles.gameItem}
                     classList={{
@@ -30,7 +31,7 @@ const GameItem: Component<GameItemProps> = (props) => {
                         </Typography>
                     </Box>
                 </Stack>
-            </a>
+            </A>
         </Grid>
     )
 }
