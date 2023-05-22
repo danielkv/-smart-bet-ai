@@ -73,9 +73,12 @@ class TelegramBot extends (EventEmitter as new () => TypedEmitter<TTelegramBotEv
     }
 
     async getUpdates(): Promise<Update[]> {
-        const response = await fetch(this.getUpdatesUrl + `?limit=${this.limit}&offset=${this.offset}`, {
-            method: 'GET',
-        })
+        const response = await fetch(
+            this.getUpdatesUrl + `?limit=${this.limit}&offset=${this.offset}&allowed_updates[]=channel_post`,
+            {
+                method: 'GET',
+            }
+        )
 
         const { result } = await response.json()
 

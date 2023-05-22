@@ -11,37 +11,37 @@ export const GAMES_CONFIG: IGameConfig[] = [
         image: aviatorImg,
         name: 'aviator',
         label: 'Aviator',
-        url: '#',
+        url: 'https://go.aff.7k-partners.com/d5ls6qw1?source_id=AppInside-SmarBet',
     },
     {
         image: bacboImg,
         name: 'bacbo',
         label: 'Bac Bo',
-        url: '#',
+        url: 'https://go.aff.7k-partners.com/3cwrzto4?source_id=AppInside-SmarBet',
     },
     {
         image: dragonTigerImg,
         name: 'dragon-tiger',
         label: 'Dragon Tiger',
-        url: '#',
+        url: 'https://go.aff.7k-partners.com/nq3ksq4k?source_id=AppInside-SmarBet',
     },
     {
         image: minesImg,
         name: 'mines',
         label: 'Mines',
-        url: '#',
+        url: 'https://go.aff.7k-partners.com/pmeqj4yw?source_id=AppInside-SmarBet',
     },
     {
         image: penaltyImg,
         name: 'penalty',
         label: 'Penalty',
-        url: '#',
+        url: 'https://go.aff.7k-partners.com/mk1t5i3c?source_id=AppInside-SmarBet',
     },
     {
         image: spaceManImg,
         name: 'space-man',
         label: 'Space Man',
-        url: '#',
+        url: 'https://go.aff.7k-partners.com/qqfesu96?source_id=AppInside-SmarBet',
     },
 ]
 

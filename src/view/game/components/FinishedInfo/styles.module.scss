@@ -1,0 +1,13 @@
+.check {
+    animation: growing 0.3s ease-in-out infinite;
+    animation-direction: alternate-reverse;
+}
+
+@keyframes growing {
+    from {
+        transform: scale(0.8);
+    }
+    to {
+        transform: scale(1);
+    }
+}

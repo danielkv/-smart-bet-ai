@@ -33,14 +33,13 @@ export function updateSignalStore(signals: TSignal[]) {
                 break
             }
             case 'finished':
-            case 'score': {
                 if (!game) return
-
+            case 'score': {
                 store[signal.game] = { [signal.type]: signal, entry: game?.entry as any }
                 break
             }
             default: {
-                if (!game?.possible || !game?.entry) return
+                if (!game?.entry) return
 
                 game[signal.type] = signal
 

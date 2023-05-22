@@ -18,8 +18,6 @@ const icons = {
 }
 
 const PenaltyEntryInfo: Component<PenaltyEntryInfoProps> = (props) => {
-    console.log(JSON.stringify(props.entry.map, null, 2))
-
     return (
         <Stack direction="row" spacing={6} justifyContent="center" alignItems="center">
             <Stack direction="row" spacing={3}>
