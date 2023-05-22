@@ -9,6 +9,8 @@ import { TGameType } from '../../common/interfaces/common'
 import { getGameStore, signalStore } from '../../domain/contexts/signals'
 
 import EntryInfo from './components/EntryInfo'
+import FinishedInfo from './components/FinishedInfo'
+import ScoreInfo from './components/ScoreInfo'
 import styles from './styles.module.scss'
 
 const GameScreen: Component = () => {
@@ -69,7 +71,15 @@ const GameScreen: Component = () => {
                 <EntryInfo entry={gameSignals()?.entry} />
             </Show>
 
-            <Button variant="outlined" href="#">
+            <Show when={!!gameSignals()?.finished}>
+                <FinishedInfo signal={gameSignals()?.finished} />
+            </Show>
+
+            <Show when={!!gameSignals()?.score}>
+                <ScoreInfo signal={gameSignals()?.score} />
+            </Show>
+
+            <Button variant="outlined" href={gameConfig.url} component="a" target="_blank">
                 Acessar jogo
             </Button>
         </Stack>
