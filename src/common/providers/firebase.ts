@@ -72,10 +72,14 @@ class FirebaseProvider {
     //
 }
 
-export const firebaseProvider = new FirebaseProvider({
-    authEmulatorUrl: 'http://localhost:9099',
-    functionEmulator: {
-        host: 'localhost',
-        port: 5001,
-    },
-})
+export const firebaseProvider = new FirebaseProvider(
+    import.meta.env.DEV
+        ? {
+              authEmulatorUrl: 'http://localhost:9099',
+              functionEmulator: {
+                  host: 'localhost',
+                  port: 5001,
+              },
+          }
+        : undefined
+)
