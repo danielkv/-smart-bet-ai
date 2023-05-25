@@ -3,6 +3,8 @@ import { Component } from 'solid-js'
 import { A } from '@solidjs/router'
 import { Box, Grid, Stack, Typography } from '@suid/material'
 
+import { ERouteNames } from '../../../router/types'
+import { pathJoin } from '../../../router/utils'
 import { IGameConfig } from '../../interfaces/common'
 
 import styles from './styles.module.scss'
@@ -14,7 +16,7 @@ export interface GameItemProps extends Omit<IGameConfig, 'url'> {
 const GameItem: Component<GameItemProps> = (props) => {
     return (
         <Grid item xs={4}>
-            <A class={styles.gameButton} href={`/games/${props.name}`}>
+            <A class={styles.gameButton} href={pathJoin(ERouteNames.GAMES, props.name)}>
                 <Stack
                     class={styles.gameItem}
                     classList={{

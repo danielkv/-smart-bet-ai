@@ -6,6 +6,7 @@ import { Alert, Box, Button, Chip, Stack, Typography } from '@suid/material'
 import GameInfoChip from '../../common/components/GameInfoChip'
 import { GAMES_CONFIG_OBJ } from '../../common/components/utils/game.config'
 import { TGameType } from '../../common/interfaces/common'
+import { redirectToLogin } from '../../common/utils/redirectToLogin'
 import { getGameStore, signalStore } from '../../domain/contexts/signals'
 
 import EntryInfo from './components/EntryInfo'
@@ -14,6 +15,8 @@ import ScoreInfo from './components/ScoreInfo'
 import styles from './styles.module.scss'
 
 const GameScreen: Component = () => {
+    redirectToLogin()
+
     const params = useParams<{ gameName: TGameType }>()
 
     const gameSignals = createMemo(() => getGameStore(params.gameName))

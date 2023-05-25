@@ -28,6 +28,8 @@
 		"clone-deep": "^4.0.1",
 		"dayjs": "^1.11.7",
 		"events": "^3.3.0",
+		"firebase": "^9.22.0",
+		"firebaseui": "^6.0.2",
 		"node-telegram-bot-api": "^0.61.0",
 		"radash": "^10.8.1",
 		"solid-js": "^1.6.10"

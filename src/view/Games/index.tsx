@@ -1,14 +1,17 @@
-import { Component, For, createMemo, onCleanup } from 'solid-js'
+import { Component, For, createEffect, createMemo, onCleanup } from 'solid-js'
 
 import { Button, Chip, Grid, Stack, Typography } from '@suid/material'
 
 import GameItem from '../../common/components/GameItem'
 import { GAMES_CONFIG } from '../../common/components/utils/game.config'
+import { redirectToLogin } from '../../common/utils/redirectToLogin'
 import { signalStore } from '../../domain/contexts/signals'
 
 import styles from './styles.module.scss'
 
-const HomeRoute: Component = () => {
+const GamesScreen: Component = () => {
+    redirectToLogin()
+
     const thereIsPossible = createMemo(() => {
         return Object.values(signalStore).some((item) => !!item.possible)
     })
@@ -60,4 +63,4 @@ const HomeRoute: Component = () => {
     )
 }
 
-export default HomeRoute
+export default GamesScreen

@@ -1,3 +1,7 @@
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+import { User } from 'firebase/auth'
+
 import { Component, onCleanup } from 'solid-js'
 
 import { Router } from '@solidjs/router'
@@ -6,6 +10,8 @@ import { Stack } from '@suid/material'
 import { messageReader } from './bot/readers/reader'
 import { updateSignalStore } from './domain/contexts/signals'
 import AppRouter from './router'
+
+dayjs.extend(isBetween)
 
 const App: Component = () => {
     const removeListener = messageReader.listen(updateSignalStore)
